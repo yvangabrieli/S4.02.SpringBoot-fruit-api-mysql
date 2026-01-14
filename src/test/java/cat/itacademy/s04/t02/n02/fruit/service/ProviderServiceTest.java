@@ -1,10 +1,12 @@
 package cat.itacademy.s04.t02.n02.fruit.service;
 
 import cat.itacademy.s04.t02.n02.fruit.dto.ProviderRequestDTO;
+import cat.itacademy.s04.t02.n02.fruit.exception.BusinessRuleException;
 import cat.itacademy.s04.t02.n02.fruit.exception.DuplicateResourceException;
 import cat.itacademy.s04.t02.n02.fruit.exception.ProviderNotFoundException;
 import cat.itacademy.s04.t02.n02.fruit.mapper.ProviderMapper;
 import cat.itacademy.s04.t02.n02.fruit.model.Provider;
+import cat.itacademy.s04.t02.n02.fruit.repository.FruitRepository;
 import cat.itacademy.s04.t02.n02.fruit.repository.ProviderRepository;
 import cat.itacademy.s04.t02.n02.fruit.validator.ProviderValidator;
 import org.junit.jupiter.api.Test;
@@ -27,6 +29,8 @@ public class ProviderServiceTest {
     private ProviderMapper providerMapper;
     @Mock
     private ProviderValidator providerValidator;
+   @Mock
+   private FruitRepository fruitRepository;
 
     @InjectMocks
     private ProviderServiceImpl providerService;
@@ -89,5 +93,34 @@ public class ProviderServiceTest {
 
     assertThrows(ProviderNotFoundException.class,
             () -> providerService.getProviderById(1L));
+    }
+
+    @Test
+    void UpdateProvider_shouldUpdateExistingProvider(){
+    Provider existing = new Provider("FreshFruits", "Spain");
+    Provider updated = new Provider("FreshFruit", "Spain");
+
+    when(providerRepository.findById(1L))
+            .thenReturn(Optional.of(existing));
+
+    when(providerRepository.save(existing))
+            .thenReturn(existing);
+
+    Provider result = providerService.updateProvider(1L, updated);
+
+    assertEquals("FreshFruit",result.getName());
+    assertEquals("Spain", result.getCountry());
+    }
+
+    @Test
+    void deleteProvider_shouldThrowException_whenProviderHasFruits(){
+    when(providerRepository.existsById(1L))
+            .thenReturn(true);
+
+    when(fruitRepository.existsByProviderId(1L))
+            .thenReturn(true);
+
+    assertThrows(BusinessRuleException.class,
+            () -> providerService.deleteProvider(1L));
     }
 }
