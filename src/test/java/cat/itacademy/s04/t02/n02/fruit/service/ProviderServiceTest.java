@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -122,5 +123,17 @@ public class ProviderServiceTest {
 
     assertThrows(BusinessRuleException.class,
             () -> providerService.deleteProvider(1L));
+    }
+
+    @Test
+    void DeleteProvider_shouldDeleteProvider_whenNoFruits(){
+
+    when(providerRepository.existsById(1L))
+            .thenReturn(true);
+    when(fruitRepository.existsByProviderId(1L))
+            .thenReturn(false);
+
+    providerService.deleteProvider(1L);
+    verify(providerRepository).deleteById(1L);
     }
 }
