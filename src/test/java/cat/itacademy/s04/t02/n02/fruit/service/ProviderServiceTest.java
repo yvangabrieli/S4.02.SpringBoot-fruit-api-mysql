@@ -97,7 +97,7 @@ public class ProviderServiceTest {
     }
 
     @Test
-    void UpdateProvider_shouldUpdateExistingProvider(){
+    void updateProvider_shouldUpdateExistingProvider(){
     Provider existing = new Provider("FreshFruits", "Spain");
     Provider updated = new Provider("FreshFruit", "Spain");
 
@@ -126,7 +126,7 @@ public class ProviderServiceTest {
     }
 
     @Test
-    void DeleteProvider_shouldDeleteProvider_whenNoFruits(){
+    void deleteProvider_shouldDeleteProvider_whenNoFruits(){
 
     when(providerRepository.existsById(1L))
             .thenReturn(true);
