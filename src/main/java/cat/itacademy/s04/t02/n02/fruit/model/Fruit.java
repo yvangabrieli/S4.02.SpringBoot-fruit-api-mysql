@@ -2,16 +2,13 @@ package cat.itacademy.s04.t02.n02.fruit.model;
 
 import cat.itacademy.s04.t02.n02.fruit.model.Provider;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table (name = "fruits")
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor (access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 
 public class Fruit {
@@ -19,8 +16,16 @@ public class Fruit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String weightByKilos;
+    private int weightInKilos;
     @ManyToOne(optional = false)
     @JoinColumn(name = "provider_id")
-    private Provider provider;
+    private Long providerId;
+
+
+    public Fruit(String name, int weightInKilos, Long providerId) {
+        this.name = name;
+        this.weightInKilos = weightInKilos;
+        this.providerId = providerId;
+
+    }
 }
