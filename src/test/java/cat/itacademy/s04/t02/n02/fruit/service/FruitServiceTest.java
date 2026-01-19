@@ -22,7 +22,9 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.notNull;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -118,4 +120,39 @@ public class FruitServiceTest {
             assertThrows(FruitNotFoundException.class, () -> fruitService.getFruitById(2L));
     }
 
+    @Test
+    void updateFruit_shouldSuccess_whenFruitIsValid(){
+    Fruit existing = new Fruit(1L, "Apple", 5, 1L);
+    Fruit newData = new Fruit(1L, "Green Apple", 3, 1L);
+
+    doNothing().when(fruitValidator).validate(any(Fruit.class));
+    when(fruitRepository.findById(1L))
+            .thenReturn(Optional.of(existing));
+    when(fruitRepository.save(existing))
+            .thenReturn(newData);
+
+
+    Fruit result = fruitService.updateFruit(1L, newData);
+
+    assertEquals(1L, result.getId());
+    assertEquals("Green Apple", result.getName());
+    assertEquals(3, result.getWeightInKilos());
+    assertEquals(1L, result.getProviderId());
+    }
+
+    @Test
+    void updateFruit_shouldThrowException_whenFruitNotFound(){
+        Fruit newData = new Fruit("Apple", 4 , 1L);
+
+        doNothing().when(fruitValidator).validate(any(Fruit.class));
+
+        when(fruitRepository.findById(1L))
+                .thenReturn(Optional.empty());
+        assertThrows(FruitNotFoundException.class, ()-> fruitService.updateFruit(1L, newData));
+    }
+
+    @Test
+    void deleteFruit_shouldSuccess_whenFruitFound(){
+
+    }
 }

@@ -50,6 +50,7 @@ public class FruitServiceImpl implements FruitService{
         validator.validate(newData);
         existing.setName(newData.getName());
         existing.setWeightInKilos(newData.getWeightInKilos());
+        existing.setProviderId(newData.getProviderId());
         return repository.save(existing);
     }
 
