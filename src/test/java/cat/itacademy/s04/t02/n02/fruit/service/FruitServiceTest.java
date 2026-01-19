@@ -2,6 +2,7 @@ package cat.itacademy.s04.t02.n02.fruit.service;
 
 
 import cat.itacademy.s04.t02.n02.fruit.exception.BusinessRuleException;
+import cat.itacademy.s04.t02.n02.fruit.exception.FruitNotFoundException;
 import cat.itacademy.s04.t02.n02.fruit.exception.ProviderNotFoundException;
 import cat.itacademy.s04.t02.n02.fruit.mapper.FruitMapper;
 import cat.itacademy.s04.t02.n02.fruit.model.Fruit;
@@ -17,6 +18,7 @@ import org.mockito.internal.matchers.Null;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.swing.plaf.synth.SynthPainter;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -56,8 +58,9 @@ public class FruitServiceTest {
          when(fruitRepository.existsByName("Apple"))
                  .thenReturn(true);
 
+         Fruit result = fruit;
          assertThrows(BusinessRuleException.class,
-                 ()-> fruitService.createFruit(fruit));
+                 ()-> fruitService.createFruit(result));
     }
 
     @Test
@@ -76,4 +79,43 @@ public class FruitServiceTest {
         assertEquals(5, result.getWeightInKilos());
         assertNotNull(fruitRepository);
     }
+
+    @Test
+    void getAllFruit_shouldReturnListOfFruit(){
+        List<Fruit> fruits = List.of(
+                new Fruit("Apple", 5, 1L),
+                new Fruit("Pear", 5, 1L),
+                new Fruit("Oragne", 6, 2L));
+
+        when(fruitRepository.findAll())
+                .thenReturn(fruits);
+        List<Fruit> result = fruitService.getAllFruits();
+        assertEquals(3, result.size());
+    }
+
+    @Test
+    void getFruitById_shouldReturnFruitWithId(){
+               Fruit fruit = new Fruit(1L,"Apple", 5, 1L);
+
+        when(fruitRepository.findById(1L))
+                .thenReturn(Optional.of(fruit));
+
+        Fruit result = fruitService.getFruitById(1L);
+
+        assertEquals(5, result.getWeightInKilos());
+        assertEquals("Apple", result.getName());
+        assertEquals(1L, result.getProviderId());
+    }
+
+    @Test
+    void getFruitById_shouldThrowException_whenFruitNotFound(){
+            Fruit fruit = new Fruit("Apple",5 ,1L );
+
+            when(fruitRepository.findById(2L)).thenReturn(Optional.empty());
+
+            Fruit result = fruit;
+
+            assertThrows(FruitNotFoundException.class, () -> fruitService.getFruitById(2L));
+    }
+
 }
