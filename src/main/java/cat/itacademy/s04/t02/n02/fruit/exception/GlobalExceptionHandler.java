@@ -26,7 +26,7 @@ import java.util.Map;
 
         @ExceptionHandler(BusinessRuleException.class)
         public ResponseEntity<Map<String, Object>> handleBusinessRule(BusinessRuleException ex) {
-            return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+            return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
         }
 
         @ExceptionHandler(DuplicateResourceException.class)

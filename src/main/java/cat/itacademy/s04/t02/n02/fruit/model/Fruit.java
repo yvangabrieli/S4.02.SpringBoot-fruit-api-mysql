@@ -1,6 +1,5 @@
 package cat.itacademy.s04.t02.n02.fruit.model;
 
-import cat.itacademy.s04.t02.n02.fruit.model.Provider;
 import jakarta.persistence.*;
 import lombok.*;
 

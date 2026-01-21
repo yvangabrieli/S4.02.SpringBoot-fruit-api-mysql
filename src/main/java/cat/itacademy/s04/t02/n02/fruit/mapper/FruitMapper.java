@@ -3,10 +3,10 @@ package cat.itacademy.s04.t02.n02.fruit.mapper;
 import cat.itacademy.s04.t02.n02.fruit.dto.FruitRequestDTO;
 import cat.itacademy.s04.t02.n02.fruit.dto.FruitResponseDTO;
 import cat.itacademy.s04.t02.n02.fruit.model.Fruit;
-import cat.itacademy.s04.t02.n02.fruit.model.Provider;
+import org.springframework.stereotype.Component;
 
 
-
+@Component
 public class FruitMapper {
 
     public Fruit toEntity(FruitRequestDTO dto) {

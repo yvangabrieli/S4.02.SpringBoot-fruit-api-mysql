@@ -4,8 +4,9 @@ import cat.itacademy.s04.t02.n02.fruit.exception.BusinessRuleException;
 import cat.itacademy.s04.t02.n02.fruit.exception.ProviderNotFoundException;
 import cat.itacademy.s04.t02.n02.fruit.exception.ValidationException;
 import cat.itacademy.s04.t02.n02.fruit.model.Fruit;
+import org.springframework.stereotype.Component;
 
-
+@Component
 public class FruitValidator {
     private static final int MAX_WEIGHT = 1000;
     private static final int MIN_NAME_LENGTH = 4;

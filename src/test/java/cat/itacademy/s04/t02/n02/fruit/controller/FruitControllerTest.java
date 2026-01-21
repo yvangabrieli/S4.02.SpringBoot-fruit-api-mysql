@@ -131,7 +131,7 @@ public class FruitControllerTest {
 
     @Test
     void deleteFruit_shouldReturn404_whenNotFound() throws Exception {
-        doThrow(new FruitNotFoundException("Not found"))
+        doThrow(new FruitNotFoundException("Fruit Not found"))
                 .when(fruitService).deleteFruit(99L);
 
         mockMvc.perform(delete("/fruits/99"))

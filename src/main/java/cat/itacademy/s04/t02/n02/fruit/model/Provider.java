@@ -22,13 +22,10 @@ public class Provider {
     private String name;
     @NotNull
     private String country;
-
-
     public Provider (String name, String country){
         this.name = name;
         this.country = country;
     }
-
     public Provider (Long id){
         this.id = id ;
     }
