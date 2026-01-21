@@ -2,6 +2,7 @@ package cat.itacademy.s04.t02.n02.fruit.controller;
 
 import cat.itacademy.s04.t02.n02.fruit.dto.FruitRequestDTO;
 import cat.itacademy.s04.t02.n02.fruit.dto.FruitResponseDTO;
+import cat.itacademy.s04.t02.n02.fruit.exception.FruitNotFoundException;
 import cat.itacademy.s04.t02.n02.fruit.mapper.FruitMapper;
 import cat.itacademy.s04.t02.n02.fruit.model.Fruit;
 import cat.itacademy.s04.t02.n02.fruit.model.Provider;
@@ -61,6 +62,34 @@ public class FruitControllerTest {
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.name").value("Apple"))
                 .andExpect(jsonPath("$.weightInKilos").value(5));
-
     }
+    @Test
+    void createFruit_shouldReturn400_whenValidationFails() throws Exception {
+        FruitRequestDTO invalid = new FruitRequestDTO("", -1, null);
+
+        mockMvc.perform(post("/fruits")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(invalid)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void createFruit_shouldReturn404_whenProviderNotFound() throws Exception {
+        FruitRequestDTO request = new FruitRequestDTO("Apple", 5, 99L);
+        Fruit fruit = new Fruit("Apple", 5 ,99L);
+
+        when(fruitMapper.toEntity(any(FruitRequestDTO.class)))
+                .thenReturn(fruit);
+
+
+        when(fruitMapper.toEntity(any(FruitRequestDTO.class)))
+                .thenThrow(new FruitNotFoundException("Provider not found"));
+
+        mockMvc.perform(post("/fruits")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isNotFound());
+    }
+
+
 }
