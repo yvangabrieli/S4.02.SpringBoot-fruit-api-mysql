@@ -20,5 +20,6 @@ public class FruitRequestDTO {
     @Positive(message = "Fruit weight must be positive")
     private int weightInKilos;
     @NotNull(message = "Fruit must have a provider")
+    @Positive (message = "ProviderId must be positive")
     private Long providerId;
 }
