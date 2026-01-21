@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -90,6 +91,34 @@ public class FruitControllerTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isNotFound());
     }
+    @Test
+    void updateFruit_shouldReturnUpdatedFruit() throws Exception {
+        FruitRequestDTO request = new FruitRequestDTO("Green Apple", 4, 1L);
+        Fruit updated = new Fruit(1L, "Green Apple", 4, 1L);
+        FruitResponseDTO response = new FruitResponseDTO(1L, "Green Apple", 4, 1L);
 
+        when(fruitMapper.toEntity(any(FruitRequestDTO.class))).thenReturn(updated);
+        when(fruitService.updateFruit(1L, updated)).thenReturn(updated);
+        when(fruitMapper.toDTO(updated)).thenReturn(response);
+
+        mockMvc.perform(put("/fruits/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Green Apple"));
+    }
+
+    @Test
+    void updateFruit_shouldReturn404_whenNotFound() throws Exception {
+        FruitRequestDTO request = new FruitRequestDTO("Apple", 4, 1L);
+
+        when(fruitMapper.toEntity(any(FruitRequestDTO.class)))
+                .thenThrow(new FruitNotFoundException("Not found"));
+
+        mockMvc.perform(put("/fruits/99")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isNotFound());
+    }
 
 }

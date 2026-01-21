@@ -28,4 +28,8 @@ public class Provider {
         this.name = name;
         this.country = country;
     }
+
+    public Provider (Long id){
+        this.id = id ;
+    }
 }
