@@ -26,6 +26,5 @@ public class Fruit {
         this.name = name;
         this.weightInKilos = weightInKilos;
         this.providerId = providerId;
-
     }
 }
