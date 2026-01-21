@@ -5,7 +5,6 @@ import cat.itacademy.s04.t02.n02.fruit.dto.FruitResponseDTO;
 import cat.itacademy.s04.t02.n02.fruit.exception.FruitNotFoundException;
 import cat.itacademy.s04.t02.n02.fruit.mapper.FruitMapper;
 import cat.itacademy.s04.t02.n02.fruit.model.Fruit;
-import cat.itacademy.s04.t02.n02.fruit.model.Provider;
 import cat.itacademy.s04.t02.n02.fruit.service.FruitService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -21,9 +20,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -43,10 +41,10 @@ public class FruitControllerTest {
     private FruitMapper fruitMapper;
 
     @Test
-    void createFruit_shouldReturn201_whenDataIsValid() throws Exception{
-        FruitRequestDTO fruitRequestDTO = new FruitRequestDTO("Apple", 5,1L);
-        Fruit fruit = new Fruit(1L,"Apple", 5, 1L);
-        FruitResponseDTO fruitResponseDTO = new FruitResponseDTO(1L, "Apple", 5 , 1L);
+    void createFruit_shouldReturn201_whenDataIsValid() throws Exception {
+        FruitRequestDTO fruitRequestDTO = new FruitRequestDTO("Apple", 5, 1L);
+        Fruit fruit = new Fruit(1L, "Apple", 5, 1L);
+        FruitResponseDTO fruitResponseDTO = new FruitResponseDTO(1L, "Apple", 5, 1L);
 
         when(fruitMapper.toEntity(any(FruitRequestDTO.class)))
                 .thenReturn(fruit);
@@ -64,6 +62,7 @@ public class FruitControllerTest {
                 .andExpect(jsonPath("$.name").value("Apple"))
                 .andExpect(jsonPath("$.weightInKilos").value(5));
     }
+
     @Test
     void createFruit_shouldReturn400_whenValidationFails() throws Exception {
         FruitRequestDTO invalid = new FruitRequestDTO("", -1, null);
@@ -77,7 +76,7 @@ public class FruitControllerTest {
     @Test
     void createFruit_shouldReturn404_whenProviderNotFound() throws Exception {
         FruitRequestDTO request = new FruitRequestDTO("Apple", 5, 99L);
-        Fruit fruit = new Fruit("Apple", 5 ,99L);
+        Fruit fruit = new Fruit("Apple", 5, 99L);
 
         when(fruitMapper.toEntity(any(FruitRequestDTO.class)))
                 .thenReturn(fruit);
@@ -91,6 +90,7 @@ public class FruitControllerTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isNotFound());
     }
+
     @Test
     void updateFruit_shouldReturnUpdatedFruit() throws Exception {
         FruitRequestDTO request = new FruitRequestDTO("Green Apple", 4, 1L);
@@ -121,4 +121,20 @@ public class FruitControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    @Test
+    void deleteFruit_shouldReturn204_whenSuccess() throws Exception {
+        doNothing().when(fruitService).deleteFruit(1L);
+
+        mockMvc.perform(delete("/fruits/1"))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void deleteFruit_shouldReturn404_whenNotFound() throws Exception {
+        doThrow(new FruitNotFoundException("Not found"))
+                .when(fruitService).deleteFruit(99L);
+
+        mockMvc.perform(delete("/fruits/99"))
+                .andExpect(status().isNotFound());
+    }
 }
