@@ -80,57 +80,109 @@ This project is a **Spring Boot REST API** for managing a fruit inventory system
 ## 📁 Project Structure
 
 fruit-api-mysql/
+
 ├── src/
+
 │ ├── main/
+
 │ │ ├── java/cat/itacademy/s04/t02/n02/fruit/
+
 │ │ │ ├── controller/
+
 │ │ │ │ ├── FruitController.java
+
 │ │ │ │ └── ProviderController.java
+
 │ │ │ ├── service/
+
 │ │ │ │ ├── FruitService.java
+
 │ │ │ │ ├── FruitServiceImpl.java
+
 │ │ │ │ ├── ProviderService.java
+
 │ │ │ │ └── ProviderServiceImpl.java
+
 │ │ │ ├── repository/
+
 │ │ │ │ ├── FruitRepository.java
+
 │ │ │ │ └── ProviderRepository.java
+
 │ │ │ ├── model/
+
 │ │ │ │ ├── Fruit.java
+
 │ │ │ │ └── Provider.java
+
 │ │ │ ├── dto/
+
 │ │ │ │ ├── FruitRequestDTO.java
+
 │ │ │ │ ├── FruitResponseDTO.java
+
 │ │ │ │ ├── ProviderRequestDTO.java
+
 │ │ │ │ └── ProviderResponseDTO.java
+
 │ │ │ ├── mapper/
+
 │ │ │ │ ├── FruitMapper.java
+
 │ │ │ │ └── ProviderMapper.java
+
 │ │ │ ├── validator/
+
 │ │ │ │ ├── FruitValidator.java
+
 │ │ │ │ └── ProviderValidator.java
+
 │ │ │ ├── exception/
+
 │ │ │ │ ├── BusinessRuleException.java
+
 │ │ │ │ ├── DuplicateResourceException.java
+
 │ │ │ │ ├── FruitNotFoundException.java
+
 │ │ │ │ ├── ProviderNotFoundException.java
+
 │ │ │ │ ├── ValidationException.java
+
 │ │ │ │ └── GlobalExceptionHandler.java
+
 │ │ │ └── FruitApiMysqlApplication.java
+
 │ │ └── resources/
+
 │ │ └── application.properties
+
 ├── test/java/cat/itacademy/s04/t02/n02/fruit/
+
 │ ├── controller/
+
 │ │ ├── FruitControllerTest.java
+
 │ │ └── ProviderControllerTest.java
+
 │ ├── service/
+
 │ │ ├── FruitServiceTest.java
+
 │ │ └── ProviderServiceTest.java
+
 │ └── FruitApiMysqlApplicationTests.java
+
 ├── Dockerfile
+
 ├── docker-compose.yml
+
 ├── pom.xml
+
 ├── mvnw
+
 ├── mvnw.cmd
+
 └── README.md
 
 ---
@@ -145,7 +197,7 @@ fruit-api-mysql/
 - MySQL (via Docker)
 
 ### 1. Clone the repository
-```bash
+
 git clone <repository-url>
 cd fruit-api-mysql
 
@@ -227,7 +279,6 @@ docker-compose down
 🗄️ Database Schema
 providers
 
-Copiar código
 CREATE TABLE providers (
   id BIGINT PRIMARY KEY AUTO_INCREMENT,
   name VARCHAR(255) NOT NULL UNIQUE,
