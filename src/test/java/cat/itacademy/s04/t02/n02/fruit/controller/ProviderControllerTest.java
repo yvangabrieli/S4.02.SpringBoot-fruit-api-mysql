@@ -9,7 +9,6 @@ import cat.itacademy.s04.t02.n02.fruit.mapper.ProviderMapper;
 import cat.itacademy.s04.t02.n02.fruit.model.Provider;
 import cat.itacademy.s04.t02.n02.fruit.service.ProviderService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.aspectj.apache.bcel.classfile.Module;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

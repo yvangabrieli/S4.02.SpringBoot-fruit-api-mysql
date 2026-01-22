@@ -28,7 +28,7 @@ public class FruitServiceImpl implements FruitService{
         if (repository.existsByName(fruit.getName())) {
             throw new BusinessRuleException("A fruit with the name '" + fruit.getName() + "' already exists");
         }
-        if(!repository.existsByProviderId(fruit.getProviderId())){
+        if(!repository.existsByProviderId(fruit.getProvider().getId())){
             throw new ProviderNotFoundException("Fruit doesn't have a provider");
         }
         return repository.save(fruit);
@@ -50,7 +50,7 @@ public class FruitServiceImpl implements FruitService{
         validator.validate(newData);
         existing.setName(newData.getName());
         existing.setWeightInKilos(newData.getWeightInKilos());
-        existing.setProviderId(newData.getProviderId());
+        existing.setProvider(newData.getProvider());
         return repository.save(existing);
     }
 

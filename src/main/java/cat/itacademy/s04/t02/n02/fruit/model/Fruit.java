@@ -16,14 +16,17 @@ public class Fruit {
     private Long id;
     private String name;
     private int weightInKilos;
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "provider_id")
-    private Long providerId;
+    private Provider provider;
 
 
-    public Fruit(String name, int weightInKilos, Long providerId) {
+
+    public Fruit(String name, int weightInKilos, Provider provider) {
         this.name = name;
         this.weightInKilos = weightInKilos;
-        this.providerId = providerId;
+        this.provider = provider;
+
     }
+
 }

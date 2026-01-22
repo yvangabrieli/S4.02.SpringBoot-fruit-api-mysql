@@ -36,9 +36,9 @@ public class FruitServiceTest {
     @Test
     void createFruit_shouldThrowException_whenProviderNotFound() {
         Provider provider = new Provider("Fresh Fruit", "Spain");
-        Fruit fruit = new Fruit("Apple", 5, provider.getId());
+        Fruit fruit = new Fruit("Apple", 5, provider);
 
-        when(fruitRepository.existsByProviderId(fruit.getProviderId()))
+        when(fruitRepository.existsByProviderId(fruit.getProvider().getId()))
                 .thenReturn(false);
 
         assertThrows(ProviderNotFoundException.class,
@@ -49,7 +49,7 @@ public class FruitServiceTest {
     void createFruit_shouldThrowException_whenFruitAlreadyExist() {
         Provider provider = new Provider("Fresh Fruit", "Spain");
 
-        Fruit fruit = new Fruit("Apple", 5, provider.getId());
+        Fruit fruit = new Fruit("Apple", 5, provider);
 
         when(fruitRepository.existsByName("Apple"))
                 .thenReturn(true);
@@ -63,11 +63,11 @@ public class FruitServiceTest {
     void createFruit_shouldReturnFruit_whenDataIsValid() {
         Provider provider = new Provider("Fresh Fruit", "Spain");
 
-        Fruit fruit = new Fruit("Apple", 5, provider.getId());
+        Fruit fruit = new Fruit("Apple", 5, provider);
 
         when(fruitRepository.existsByName("Apple"))
                 .thenReturn(false);
-        when(fruitRepository.existsByProviderId(fruit.getProviderId()))
+        when(fruitRepository.existsByProviderId(fruit.getProvider().getId()))
                 .thenReturn(true);
         when(fruitRepository.save(fruit))
                 .thenReturn(fruit);
@@ -85,9 +85,9 @@ public class FruitServiceTest {
         Provider provider1 = new Provider("Eco Agricole", "France");
 
         List<Fruit> fruits = List.of(
-                new Fruit("Apple", 5, provider.getId()),
-                new Fruit("Pear", 5, provider.getId()),
-                new Fruit("Oragne", 6, provider1.getId()));
+                new Fruit("Apple", 5, provider),
+                new Fruit("Pear", 5, provider),
+                new Fruit("Oragne", 6, provider1));
 
         when(fruitRepository.findAll())
                 .thenReturn(fruits);
@@ -98,7 +98,7 @@ public class FruitServiceTest {
     @Test
     void getFruitById_shouldReturnFruitWithId() {
         Provider provider = new Provider(1L);
-        Fruit fruit = new Fruit(1L, "Apple", 5, provider.getId());
+        Fruit fruit = new Fruit(1L, "Apple", 5, provider);
 
         when(fruitRepository.findById(1L))
                 .thenReturn(Optional.of(fruit));
@@ -107,13 +107,13 @@ public class FruitServiceTest {
 
         assertEquals(5, result.getWeightInKilos());
         assertEquals("Apple", result.getName());
-        assertEquals(1L, result.getProviderId());
+        assertEquals(1L, result.getProvider().getId());
     }
 
     @Test
     void getFruitById_shouldThrowException_whenFruitNotFound() {
         Provider provider = new Provider("Fresh Fruits", "Spain");
-        Fruit fruit = new Fruit("Apple", 5, provider.getId());
+        Fruit fruit = new Fruit("Apple", 5, provider);
 
         when(fruitRepository.findById(2L)).thenReturn(Optional.empty());
 
@@ -125,8 +125,8 @@ public class FruitServiceTest {
     @Test
     void updateFruit_shouldSuccess_whenFruitIsValid() {
         Provider provider = new Provider(1L);
-        Fruit existing = new Fruit(1L, "Apple", 5, provider.getId());
-        Fruit newData = new Fruit(1L, "Green Apple", 3, provider.getId());
+        Fruit existing = new Fruit(1L, "Apple", 5, provider);
+        Fruit newData = new Fruit(1L, "Green Apple", 3, provider);
 
         doNothing().when(fruitValidator).validate(any(Fruit.class));
         when(fruitRepository.findById(1L))
@@ -140,14 +140,14 @@ public class FruitServiceTest {
         assertEquals(1L, result.getId());
         assertEquals("Green Apple", result.getName());
         assertEquals(3, result.getWeightInKilos());
-        assertEquals(1L, result.getProviderId());
+        assertEquals(1L, result.getProvider().getId());
     }
 
     @Test
     void updateFruit_shouldThrowException_whenFruitNotFound() {
         Provider provider = new Provider("Fresh Fruit", "Spain");
 
-        Fruit newData = new Fruit("Apple", 4, provider.getId());
+        Fruit newData = new Fruit("Apple", 4, provider);
 
         when(fruitRepository.findById(1L))
                 .thenReturn(Optional.empty());

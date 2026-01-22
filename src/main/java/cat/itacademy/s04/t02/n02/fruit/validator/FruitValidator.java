@@ -24,7 +24,7 @@ public class FruitValidator {
         if (fruit.getName().length() < MIN_NAME_LENGTH) {
             throw new BusinessRuleException("Fruit name must have at least 4 characters");
         }
-        if(fruit.getProviderId() == null || fruit.getProviderId().describeConstable().isEmpty()) {
+        if(fruit.getProvider().getId() == null || fruit.getProvider().getId().describeConstable().isEmpty()) {
             throw new ProviderNotFoundException("Provider_Id cannot be null or empty");
         }
     }

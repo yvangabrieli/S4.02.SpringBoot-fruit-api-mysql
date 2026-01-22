@@ -25,7 +25,7 @@ public class ProviderController {
     }
 
     @PostMapping
-    public ResponseEntity<ProviderResponseDTO> create(@Valid @RequestBody ProviderRequestDTO dto) {
+    public ResponseEntity<ProviderResponseDTO> createProvider(@Valid @RequestBody ProviderRequestDTO dto) {
         Provider saved = service.createProvider(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toDTO(saved));
     }
